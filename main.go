@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"time"
 )
@@ -23,6 +24,26 @@ func (todos *Todos) add(title string) {
 	}
 
 	*todos = append(*todos, todo)
+}
+
+func (todos *Todos) validateIndex(index int) error {
+	if index < 0 || index >= len(*todos) {
+		err := errors.New("Invalid index")
+		fmt.Println(err.Error())
+		return err
+	}
+	return nil
+}
+
+func (todos *Todos) delete(index int) error {
+	t := *todos
+	if err := t.validateIndex(index); err != nil {
+		return err
+	}
+
+	*todos = append(t[:index], t[index+1])
+
+	return nil
 }
 
 func main() {
