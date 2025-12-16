@@ -32,7 +32,7 @@ func (todos *Todos) add(title string) {
 
 func (todos *Todos) validateIndex(index int) error {
 	if index < 0 || index >= len(*todos) {
-		err := errors.New("Invalid index")
+		err := errors.New("invalid index")
 		fmt.Println(err.Error())
 		return err
 	}
@@ -106,5 +106,13 @@ func (todos *Todos) print() {
 }
 
 func main() {
+	todos := Todos{}
 
+	storage := NewStorage[Todos]("todos.json")
+	storage.Load(&todos)
+
+	cmdFlags := NewCmdFlags()
+	cmdFlags.Execute(&todos)
+
+	storage.Save(todos)
 }
